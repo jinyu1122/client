@@ -24,7 +24,7 @@ export const connectSocket = () => {
 
     socket.on('candidate', async (data: any) => {
         console.log('get ice from caller');
-        if (data.candidate) {
+        if (data?.candidate) {
             await pc.addIceCandidate(data);
         }
     });
@@ -34,7 +34,8 @@ export const connectSocket = () => {
 async function createPeerConnection() {
     pc = new RTCPeerConnection(config);
     pc.onicecandidate = e => {
-      socket.emit('iceFromCallee', e.candidate);
+        console.log('ice:', e?.candidate);
+        socket.emit('iceFromCallee', e.candidate);
     };
     const remoteVideo = document.getElementById('remote-video') as HTMLVideoElement;
     pc.ontrack = e => remoteVideo.srcObject = e.streams[0];
