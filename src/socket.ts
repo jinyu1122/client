@@ -5,7 +5,7 @@ let pc: RTCPeerConnection;
 let config: any = null;
 
 export const connectSocket = () => {
-    socket = io('http://localhost:8080');
+    socket = io('http://52.176.55.106:8080');
     socket.on('testpong', () => {
         console.log('testpong');
     });
