@@ -21,13 +21,20 @@ export const connectSocket = () => {
         console.log('get config', data);
         config = data;
     });
+
+    socket.on('candidate', async (data: any) => {
+        console.log('get ice from caller');
+        if (data.candidate) {
+            await pc.addIceCandidate(data);
+        }
+    });
 }
 
 
 async function createPeerConnection() {
     pc = new RTCPeerConnection(config);
     pc.onicecandidate = e => {
-      
+      socket.emit('iceFromCallee', e.candidate);
     };
     const remoteVideo = document.getElementById('remote-video') as HTMLVideoElement;
     pc.ontrack = e => remoteVideo.srcObject = e.streams[0];
