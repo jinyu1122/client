@@ -1,14 +1,24 @@
-import { connectSocket } from "./socket";
+import { useState } from "react";
+import { getShareScreenStream } from "./getShareScreenStream";
+import { connectSocket } from "./screenShareRTCConnection";
 
 function App() {
-  const btnClicked = () => {
-    connectSocket();
+  const [connected, setConntected] = useState(false);
+  const btnClicked = async () => {
+    const stream = await getShareScreenStream();
+    connectSocket(stream);
+    setConntected(true);
   };
   
   return (
     <div className="App">
-      <button onClick={btnClicked} style={{ width: 100, height: 50}} >Connect</button>
-      <video id="remote-video" autoPlay playsInline />
+      { 
+      !connected && 
+      <button onClick={btnClicked} style={{ width: 100, height: 50}} >Share Screen</button>
+      }
+      {
+        connected && <h1>Share screen succeed. Keep this window open.</h1>
+      }
     </div>
   );
 }
